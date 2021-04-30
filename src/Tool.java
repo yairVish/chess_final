@@ -12,13 +12,7 @@ public class Tool {
     public Tool(short[][] screenData){
         this.screenData = screenData;
     }
-    public boolean locIsEmpty(int pos_i,int pos_j) {
-        System.out.println("screenData[pos_i][pos_j]: "+screenData[pos_i][pos_j]);
-        if(screenData[pos_i][pos_j]==1||screenData[pos_i][pos_j]==2){
-            return true;
-        }
-        return false;
-    }
+
     public int select(int from_pos_i,int from_pos_j){
         System.out.println("isLegal(from_pos_i,from_pos_j): "+isLegal(from_pos_i,from_pos_j));
         if(!isLegal(from_pos_i,from_pos_j)) {
@@ -48,8 +42,8 @@ public class Tool {
     }
 
     public int move(int to_pos_i,int to_pos_j){
-        System.out.println("from_pos_i: "+from_pos_i);
-        System.out.println("from_pos_j: "+from_pos_j);
+        System.out.println("from_pos_iM: "+from_pos_i);
+        System.out.println("from_pos_jM: "+from_pos_j);
         if(from_pos_i==-1||from_pos_j==-1||!isLegal(from_pos_i,from_pos_j)){
             if (my_move)
                 return 1;

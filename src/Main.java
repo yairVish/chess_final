@@ -71,7 +71,7 @@ public class Main extends JPanel implements ActionListener {
     private Image white;
     private Image green;
     private Image glass;
-    private Tool tool;
+    private OperateGame operateGame;
     private final Color dotColor = new Color(192, 192, 0);
     private Color mazeColor;
     private boolean inGame = true;
@@ -230,10 +230,28 @@ public class Main extends JPanel implements ActionListener {
         }
 
         if(send){
-            if(tool.locIsEmpty(mouse_y,mouse_x)&&tool.getFrom_pos_i()!=-1&&tool.getFrom_pos_j()!=-1){
-                turn_i=0;
+            int pr_i = operateGame.getTool().getFrom_pos_i();
+            int pr_j = operateGame.getTool().getFrom_pos_j();
+            if(operateGame.locIsEmpty(mouse_y,mouse_x)
+                    &&operateGame.getTool().getFrom_pos_i()!=-1
+                    &&operateGame.getTool().getFrom_pos_j()!=-1){
+                if ((screenData[pr_i][pr_j] & 4) != 0) {
+                    if(new Pawn(screenData,4).isLegal(mouse_y,mouse_x,pr_i,pr_j)){
+                        turn_i = 0;
+                    }else{
+                        turn_i = 1;
+                    }
+                }else if ((screenData[pr_i][pr_j] & 256) != 0){
+                    if(new Pawn(screenData,256).isLegalB(mouse_y,mouse_x,pr_i,pr_j)){
+                        turn_i = 0;
+                    }else{
+                        turn_i = 1;
+                    }
+                }else{
+                    turn_i = 0;
+                }
             }else{
-                turn_i=1;
+                turn_i = 1;
             }
             //Think a=new Think();class to fix
             System.out.println("t: "+turn_i);
@@ -253,14 +271,14 @@ public class Main extends JPanel implements ActionListener {
             int i1=0;
             char opponentMark = mark == 'W' ? 'B' : 'W';
             frame.setTitle("Chess: Player " + mark);
-            tool.setMark(mark);
+            operateGame.setMark(mark);
             while (in.hasNextLine()){
                 response = in.nextLine();
                 if (response.startsWith("VALID_MOVE")){
                     loc =Integer.parseInt(response.substring(12,13));
                     loc_y =Integer.parseInt(response.substring(11,12));
                     //Move_white a=new Move_white(true);class to fix
-                    operate(true);
+                    operateGame.operate(loc,loc_y,true);
                     System.out.println("pos1: "+move);
                 } else if (response.startsWith("OPPONENT_MOVED")) {
                     ib11=false;
@@ -277,7 +295,7 @@ public class Main extends JPanel implements ActionListener {
                             }
                         }
                     }
-                    operate(false);
+                    operateGame.operate(loc,loc_y,false);
                     //Move_white a=new Move_white(false);class to fix
                 }
                 else if (response.startsWith("DEFEAT")){
@@ -476,14 +494,6 @@ public class Main extends JPanel implements ActionListener {
         }
         initLevel();
     }
-    private void operate(boolean b){
-        tool.setMy_move(b);
-        if(tool.locIsEmpty(loc,loc_y)){
-            turn_i = tool.move(loc,loc_y);
-        }else{
-            turn_i = tool.select(loc,loc_y);
-        }
-    }
     private void initLevel() {
         int i = 0;
         int i2 = -1;
@@ -494,7 +504,7 @@ public class Main extends JPanel implements ActionListener {
                     screenData[i][j] = levelData[i][j];
                 }
             }
-            tool=new Tool(screenData);
+            operateGame=new OperateGame(screenData);
         }catch(Exception e) {
             System.err.println(i);
             System.err.println(j);
