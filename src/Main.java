@@ -232,21 +232,22 @@ public class Main extends JPanel implements ActionListener {
         if(send){
             int pr_i = operateGame.getTool().getFrom_pos_i();
             int pr_j = operateGame.getTool().getFrom_pos_j();
-            if(operateGame.locIsEmpty(mouse_y,mouse_x)
-                    &&operateGame.getTool().getFrom_pos_i()!=-1
-                    &&operateGame.getTool().getFrom_pos_j()!=-1){
+
+            if(operateGame.locIsEmpty(mouse_y,mouse_x)&&pr_i!=-1&&pr_j!=-1){
                 if ((screenData[pr_i][pr_j] & 4) != 0) {
-                    if(new Pawn(screenData,4).isLegal(mouse_y,mouse_x,pr_i,pr_j)){
-                        turn_i = 0;
-                    }else{
-                        turn_i = 1;
-                    }
+                    turn_i = new Pawn(screenData, 4).isLegal(mouse_y, mouse_x, pr_i, pr_j) ? 0 : 1;
                 }else if ((screenData[pr_i][pr_j] & 256) != 0){
-                    if(new Pawn(screenData,256).isLegalB(mouse_y,mouse_x,pr_i,pr_j)){
-                        turn_i = 0;
-                    }else{
-                        turn_i = 1;
-                    }
+                    turn_i = new Pawn(screenData,256).isLegalB(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                }else if ((screenData[pr_i][pr_j] & 8) != 0 || (screenData[pr_i][pr_j] & 512) != 0){
+                    turn_i = new Horse(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                }else if ((screenData[pr_i][pr_j] & 16) != 0 || (screenData[pr_i][pr_j] & 1024) != 0){
+                    turn_i = new Bishop(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                }else if ((screenData[pr_i][pr_j] & 32) != 0 || (screenData[pr_i][pr_j] & 2048) != 0){
+                    turn_i = new Rook(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                }else if ((screenData[pr_i][pr_j] & 64) != 0 || (screenData[pr_i][pr_j] & 4096) != 0){
+                    turn_i = new Queen(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                }else if ((screenData[pr_i][pr_j] & 128) != 0 || (screenData[pr_i][pr_j] & 8192) != 0){
+                    turn_i = new King(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
                 }else{
                     turn_i = 0;
                 }

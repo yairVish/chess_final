@@ -20,11 +20,11 @@ public class DrawImages {
     private Image glass;
 
     public DrawImages(){
-        king = new ImageIcon("king.png").getImage();
-        queen = new ImageIcon("queen.png").getImage();
-        rook = new ImageIcon("rook.png").getImage();
-        bishop = new ImageIcon("bishop.png").getImage();
-        horse = new ImageIcon("horse.png").getImage();
+        king = new ImageIcon("king_t.png").getImage();
+        queen = new ImageIcon("queen_t.png").getImage();
+        rook = new ImageIcon("rook_t.png").getImage();
+        bishop = new ImageIcon("bishop_t.png").getImage();
+        horse = new ImageIcon("horse_t.png").getImage();
         pawn = new ImageIcon("pawn.png").getImage();
         king_b = new ImageIcon("king_b.png").getImage();
         quin_b = new ImageIcon("queen_b2.png").getImage();
