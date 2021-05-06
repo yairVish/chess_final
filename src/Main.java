@@ -78,68 +78,20 @@ public class Main extends JPanel implements ActionListener {
     private boolean ib11 = false;
     private boolean b1 = true;
     private boolean b2 = true;
-    private boolean ag = true;
-    private boolean ag2 = false;
     private boolean send = false;
-    private boolean client;
     private boolean turn=true;
-    private boolean turn2=true;
-    private boolean chek_king=true;
-    private int num;
     private int move = 0;
     private int turn_i = 1;
-    private int pos_ir2 = 0;
-    public  static int pos_jr2 =0;
     private Socket socket;
-    private int k=0;
-    private int n=0;
-    private int count=0;
-    private  int pos_ir;
-    private  int pos_jr;
     private int loc;
     private int loc_y;
-    private int loc2;
-    private int loc_y2;
     private int mouse_x;
     private int mouse_y;
     private char mark;
-    private int wa=0;
-    private boolean ib12=false;
-    private boolean bw;
-    private boolean e1;
-    private boolean chek_rook=true;
-    private boolean chek_rook2=true;
-    private int pos_irb;
-    private int pos_jrb;
-    private int moveb=-1;
-    private boolean ib12b=false;
-    private boolean ib11b=false;
-    private boolean e=true;
-    private boolean chek_w=true;
-    private boolean chek_b=true;
-    private boolean chek_b1=true;
-    private int ir=0;
-    private int jr=0;
-    private int []arr_ir=new int [8];
-    private int []arr_jr=new int [8];
-    private int num2;
     private int glass_x=50;
-    private boolean tr2=false;
-    private boolean tr=false;
-    private boolean horse2=false;
-    private boolean horse_b2=false;
-    private boolean separate=true;
-    private boolean approval;
     private boolean go=true;
     private Scanner in;
-    private PrintWriter out;
-    private boolean clear=true;
-    private boolean break1=true;
-    private boolean legal=true;
-    private boolean think;
-    private boolean chek_rook_b=true;
-    private boolean chek_king_b=true;
-    private boolean chek_rook_b2=true;
+    private PrintWriter out;;
     JFrame frame;
     public Main(String serverAddress,JFrame frame) throws Exception{
         socket = new Socket(serverAddress, PORT);
@@ -233,21 +185,34 @@ public class Main extends JPanel implements ActionListener {
             int pr_i = operateGame.getTool().getFrom_pos_i();
             int pr_j = operateGame.getTool().getFrom_pos_j();
 
-            if(operateGame.locIsEmpty(mouse_y,mouse_x)&&pr_i!=-1&&pr_j!=-1){
+            if((operateGame.locIsEmpty(mouse_y,mouse_x)||operateGame.moveToEat(mouse_y,mouse_x))
+                    &&pr_i!=-1&&pr_j!=-1){
                 if ((screenData[pr_i][pr_j] & 4) != 0) {
-                    turn_i = new Pawn(screenData, 4).isLegal(mouse_y, mouse_x, pr_i, pr_j) ? 0 : 1;
+                    turn_i = new Pawn(screenData, 4,mark,true)
+                            .isLegal(mouse_y, mouse_x, pr_i, pr_j) ? 0 : 1;
                 }else if ((screenData[pr_i][pr_j] & 256) != 0){
-                    turn_i = new Pawn(screenData,256).isLegalB(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                    turn_i = new Pawn(screenData,256,mark,true)
+                            .isLegalB(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
                 }else if ((screenData[pr_i][pr_j] & 8) != 0 || (screenData[pr_i][pr_j] & 512) != 0){
-                    turn_i = new Horse(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                    turn_i = new Horse(screenData,mark,true)
+                            .isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
                 }else if ((screenData[pr_i][pr_j] & 16) != 0 || (screenData[pr_i][pr_j] & 1024) != 0){
-                    turn_i = new Bishop(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                    turn_i = new Bishop(screenData,mark,true).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
                 }else if ((screenData[pr_i][pr_j] & 32) != 0 || (screenData[pr_i][pr_j] & 2048) != 0){
-                    turn_i = new Rook(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                    turn_i = new Rook(screenData,mark,true).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
                 }else if ((screenData[pr_i][pr_j] & 64) != 0 || (screenData[pr_i][pr_j] & 4096) != 0){
-                    turn_i = new Queen(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                    turn_i = new Queen(screenData,mark,true).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
                 }else if ((screenData[pr_i][pr_j] & 128) != 0 || (screenData[pr_i][pr_j] & 8192) != 0){
-                    turn_i = new King(screenData).isLegal(mouse_y,mouse_x,pr_i,pr_j) ? 0 : 1;
+                    boolean b1=new King(screenData,mark,true)
+                            .isLegal(mouse_y,mouse_x,pr_i,pr_j,false);
+                    boolean b2 = new Castling(screenData,mark,true)
+                            .isCastlingS(mouse_y,mouse_x,pr_i,pr_j,operateGame.isCheck_king()
+                                    ,operateGame.isCheck_rook1());
+                    boolean b3 = new Castling(screenData,mark,true)
+                            .isCastlingL(mouse_y,mouse_x,pr_i,pr_j,operateGame.isCheck_king()
+                                    ,operateGame.isCheck_rook2());
+
+                    turn_i = b1 || b2 || b3 ? 0 : 1;
                 }else{
                     turn_i = 0;
                 }
@@ -268,7 +233,7 @@ public class Main extends JPanel implements ActionListener {
         try {
             String response = in.nextLine();
             System.out.println(response);
-            char mark = response.charAt(8);
+            mark = response.charAt(8);
             int i1=0;
             char opponentMark = mark == 'W' ? 'B' : 'W';
             frame.setTitle("Chess: Player " + mark);

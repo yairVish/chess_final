@@ -9,6 +9,8 @@ public class OperateGame {
     private Queen queen;
     private King king;
     private int num = 0;
+    private boolean check_king=true,check_rook1=true,check_rook2=true;
+    private boolean check_kingO=true,check_rook1O=true,check_rook2O=true;
     public OperateGame(short[][] screenData){
         this.screenData = screenData;
         tool = new Tool(screenData);
@@ -23,12 +25,19 @@ public class OperateGame {
     public int operate(int pos_i,int pos_j,boolean my_move){
             tool.setMy_move(my_move);
             setTools(my_move);
-        if(locIsEmpty(pos_i,pos_j)){
+            pawn.setNum(num);
+        if(locIsEmpty(pos_i,pos_j) || moveToEat(pos_i,pos_j)){
+            System.out.println("empty");
                 try {
                     if (num == 4) {
                         pawn.setFrom_pos_i(tool.getFrom_pos_i());
                         pawn.setFrom_pos_j(tool.getFrom_pos_j());
-                        int result = pawn.move(pos_i, pos_j);
+                        int result;
+                        if(locIsEmpty(pos_i,pos_j)) {
+                            result = pawn.move(pos_i, pos_j);
+                        }else{
+                            result = pawn.eat(pos_i, pos_j);
+                        }
                         if(result!=-1){
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
@@ -37,7 +46,12 @@ public class OperateGame {
                     }else if(num==256){
                         pawn.setFrom_pos_i(tool.getFrom_pos_i());
                         pawn.setFrom_pos_j(tool.getFrom_pos_j());
-                        int result = pawn.move(pos_i, pos_j);
+                        int result;
+                        if(locIsEmpty(pos_i,pos_j)) {
+                            result = pawn.move(pos_i, pos_j);
+                        }else{
+                            result = pawn.eat(pos_i, pos_j);
+                        }
                         if(result!=-1){
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
@@ -46,7 +60,12 @@ public class OperateGame {
                     }else if(num==8||num==512){
                         horse.setFrom_pos_i(tool.getFrom_pos_i());
                         horse.setFrom_pos_j(tool.getFrom_pos_j());
-                        int result = horse.move(pos_i, pos_j);
+                        int result;
+                        if(locIsEmpty(pos_i,pos_j)) {
+                            result = horse.move(pos_i, pos_j);
+                        }else{
+                            result = horse.eat(pos_i, pos_j);
+                        }
                         if(result!=-1){
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
@@ -55,7 +74,12 @@ public class OperateGame {
                     }else if(num==16||num==1024){
                         bishop.setFrom_pos_i(tool.getFrom_pos_i());
                         bishop.setFrom_pos_j(tool.getFrom_pos_j());
-                        int result = bishop.move(pos_i, pos_j);
+                        int result;
+                        if(locIsEmpty(pos_i,pos_j)) {
+                            result = bishop.move(pos_i, pos_j);
+                        }else{
+                            result = bishop.eat(pos_i, pos_j);
+                        }
                         if(result!=-1){
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
@@ -64,8 +88,45 @@ public class OperateGame {
                     }else if(num==32||num==2048){
                         rook.setFrom_pos_i(tool.getFrom_pos_i());
                         rook.setFrom_pos_j(tool.getFrom_pos_j());
-                        int result = rook.move(pos_i, pos_j);
+                        int result;
+                        if(locIsEmpty(pos_i,pos_j)) {
+                            result = rook.move(pos_i, pos_j);
+                        }else{
+                            result = rook.eat(pos_i, pos_j);
+                        }
                         if(result!=-1){
+                            if(my_move&&mark=='W'){//White
+                                if(tool.getFrom_pos_i()==7&&tool.getFrom_pos_j()==7){
+                                    check_rook1=false;
+                                }
+                                if(tool.getFrom_pos_i()==7&&tool.getFrom_pos_j()==0){
+                                    check_rook2=false;
+                                }
+                            }
+                            if(!my_move&&mark=='W'){//Black
+                                if(tool.getFrom_pos_i()==0&&tool.getFrom_pos_j()==7){
+                                    check_rook1O=false;
+                                }
+                                if(tool.getFrom_pos_i()==0&&tool.getFrom_pos_j()==0){
+                                    check_rook2O=false;
+                                }
+                            }
+                            if(my_move&&mark=='B'){//Black
+                                if(tool.getFrom_pos_i()==0&&tool.getFrom_pos_j()==7){
+                                    check_rook1=false;
+                                }
+                                if(tool.getFrom_pos_i()==0&&tool.getFrom_pos_j()==0){
+                                    check_rook2=false;
+                                }
+                            }
+                            if(!my_move&&mark=='B'){//white
+                                if(tool.getFrom_pos_i()==7&&tool.getFrom_pos_j()==7){
+                                    check_rook1O=false;
+                                }
+                                if(tool.getFrom_pos_i()==7&&tool.getFrom_pos_j()==0){
+                                    check_rook2O=false;
+                                }
+                            }
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
                         }
@@ -73,7 +134,12 @@ public class OperateGame {
                     }else if(num==64||num==4096){
                         queen.setFrom_pos_i(tool.getFrom_pos_i());
                         queen.setFrom_pos_j(tool.getFrom_pos_j());
-                        int result = queen.move(pos_i, pos_j);
+                        int result;
+                        if(locIsEmpty(pos_i,pos_j)) {
+                            result = queen.move(pos_i, pos_j);
+                        }else{
+                            result = queen.eat(pos_i, pos_j);
+                        }
                         if(result!=-1){
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
@@ -82,8 +148,43 @@ public class OperateGame {
                     }else if(num==128||num==8192){
                         king.setFrom_pos_i(tool.getFrom_pos_i());
                         king.setFrom_pos_j(tool.getFrom_pos_j());
-                        int result = king.move(pos_i, pos_j);
+                        int result;
+                        if(locIsEmpty(pos_i,pos_j)) {
+                            result = king.move(pos_i, pos_j);
+                        }else{
+                            result = king.eat(pos_i, pos_j);
+                        }
+                        Castling castling = new Castling(screenData,mark,my_move);
+                        boolean b_king = my_move ? check_king : check_kingO;
+                        boolean b_rook1 = my_move ? check_rook1 : check_rook1O;
+                        boolean b_rook2 = my_move ? check_rook2 : check_rook2O;
                         if(result!=-1){
+                            if(my_move){
+                                check_king=false;
+                            }
+                            if(!my_move){
+                                check_kingO=false;
+                            }
+                            tool.setFrom_pos_i(-1);
+                            tool.setFrom_pos_j(-1);
+                        }else if(castling.isCastlingS(pos_i,pos_j,tool.getFrom_pos_i(),tool.getFrom_pos_j()
+                                ,b_king,b_rook1)){
+                            if(my_move){
+                                check_king=false;
+                            }else{
+                                check_kingO=false;
+                            }
+                            castling.doCastlingS(tool.getFrom_pos_i());
+                            tool.setFrom_pos_i(-1);
+                            tool.setFrom_pos_j(-1);
+                        }else if(castling.isCastlingL(pos_i,pos_j,tool.getFrom_pos_i(),tool.getFrom_pos_j()
+                                ,b_king,b_rook2)){
+                            if(my_move){
+                                check_king=false;
+                            }else{
+                                check_kingO=false;
+                            }
+                            castling.doCastlingL(tool.getFrom_pos_i());
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
                         }
@@ -93,6 +194,7 @@ public class OperateGame {
                     }
                 }catch (Exception e){return 1;}
             }else{
+                System.out.println("select");
                 if((screenData[pos_i][pos_j] & 4) != 0){
                     num = 4;
                 }else if((screenData[pos_i][pos_j] & 8) != 0) {
@@ -131,9 +233,22 @@ public class OperateGame {
         }
         return false;
     }
+
+    public boolean moveToEat(int pos_i,int pos_j) {
+
+        if(!locIsEmpty(pos_i,pos_j)
+           &&tool.getFrom_pos_i()!=-1
+           &&tool.getFrom_pos_j()!=-1
+           &&((mark=='W'&&screenData[pos_i][pos_j]>256&&tool.isMy_move())
+                ||(mark=='B'&&screenData[pos_i][pos_j]<=130&&tool.isMy_move())
+                ||(mark=='B'&&screenData[pos_i][pos_j]>256&&!tool.isMy_move())
+                ||(mark=='W'&&screenData[pos_i][pos_j]<=130&&!tool.isMy_move()))){
+            return true;
+        }
+        return false;
+    }
     private void setTools(boolean my_move){
         pawn.setMy_move(my_move);
-        pawn.setNum(num);
         horse.setMy_move(my_move);
         bishop.setMy_move(my_move);
         rook.setMy_move(my_move);
@@ -161,5 +276,17 @@ public class OperateGame {
 
     public int getNum() {
         return num;
+    }
+
+    public boolean isCheck_king() {
+        return check_king;
+    }
+
+    public boolean isCheck_rook1() {
+        return check_rook1;
+    }
+
+    public boolean isCheck_rook2() {
+        return check_rook2;
     }
 }
