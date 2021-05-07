@@ -41,10 +41,6 @@ public class Main extends JPanel implements ActionListener {
     };
     private final static int N_BLOCKS_X = levelData.length;
     private final static int N_BLOCKS_Y = levelData[0].length;
-    private final static int PLAYER_SPEED=5;
-    private final static int VAL_ENEMY=0;
-    private final static int VAL_FIRE=10;
-    private final static int LIFE=3;
     private final static int PORT=5433;
     private final static int BLOCK_SIZE = 45;
     private static final int SCREEN_SIZE_X= N_BLOCKS_X * BLOCK_SIZE;
@@ -150,8 +146,6 @@ public class Main extends JPanel implements ActionListener {
         screenData = new short[N_BLOCKS_X * N_BLOCKS_X][N_BLOCKS_Y * N_BLOCKS_Y];
         mazeColor = new Color(5, 100, 5);
         d = new Dimension(400, 400);
-        for(int i=0;i<VAL_ENEMY;i++){
-        }
         timer = new Timer(40, this);
         timer.start();
     }
@@ -238,6 +232,7 @@ public class Main extends JPanel implements ActionListener {
             char opponentMark = mark == 'W' ? 'B' : 'W';
             frame.setTitle("Chess: Player " + mark);
             operateGame.setMark(mark);
+            operateGame.setFrame(frame);
             while (in.hasNextLine()){
                 response = in.nextLine();
                 if (response.startsWith("VALID_MOVE")){
@@ -455,9 +450,6 @@ public class Main extends JPanel implements ActionListener {
         glass = drawImages.getGlass();
     }
     public void initGame() {
-        for(int i=0;i<VAL_ENEMY;i++){
-
-        }
         initLevel();
     }
     private void initLevel() {

@@ -22,10 +22,6 @@ public class Bishop extends Tool{
         if(to_pos_i==from_pos_i&&to_pos_j==from_pos_j){
             return false;
         }
-        System.out.println("to_pos_i: "+to_pos_i);
-        System.out.println("to_pos_j: "+to_pos_j);
-        System.out.println("from_pos_i: "+from_pos_i);
-        System.out.println("from_pos_j: "+from_pos_j);
         int d = 0;
         if(from_pos_i==to_pos_i||from_pos_j==to_pos_j){
             return false;
@@ -41,7 +37,6 @@ public class Bishop extends Tool{
                         d=0;
                     }
                     d++;
-                    System.out.println("screenData["+i+"]["+j+"]: "+screenData[i][j]);
                     if(screenData[i][j]>2){
                         return false;
                     }

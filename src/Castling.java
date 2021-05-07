@@ -21,8 +21,6 @@ public class Castling {
          }
      }
     public boolean isCastlingL(int to_pos_i,int to_pos_j,int from_pos_i,int from_pos_j,boolean king,boolean rook){
-        System.out.println("king: "+king);
-        System.out.println("rook: "+rook);
         if(king&&rook&&from_pos_j==to_pos_j+2&&from_pos_i==to_pos_i
                 &&new OperateGame(screenData).locIsEmpty(to_pos_i,to_pos_j)
                 &&new OperateGame(screenData).locIsEmpty(to_pos_i,to_pos_j+1)

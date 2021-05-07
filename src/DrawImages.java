@@ -27,7 +27,7 @@ public class DrawImages {
         horse = new ImageIcon("horse_t.png").getImage();
         pawn = new ImageIcon("pawn_t.png").getImage();
         king_b = new ImageIcon("king_b.png").getImage();
-        quin_b = new ImageIcon("queen_b2.png").getImage();
+        quin_b = new ImageIcon("queen_tb.png").getImage();
         rook_b = new ImageIcon("rook_b.png").getImage();
         bishop_b = new ImageIcon("bishop_b.png").getImage();
         horse_b = new ImageIcon("horse_b.png").getImage();

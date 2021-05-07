@@ -32,7 +32,6 @@ public class King extends Tool {
         }
         super.setMark(mark);
         super.setMy_move(my_move);
-        System.out.println("super.getMark(): "+super.getMark());
         if(isThreatened(to_pos_i,to_pos_j,from_pos_i,from_pos_j,super.getMark(),super.isMy_move())&&!king){
             System.out.println("isThreatened");
             return false;

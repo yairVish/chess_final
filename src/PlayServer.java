@@ -82,7 +82,7 @@ class PlayServer {
                         return;
                     } else
 
-                    if (command.startsWith("MOVE")&&illegal(this)) {
+                    if (command.startsWith("MOVE")&&illegal(this)&&other!=null) {
                         int move=Integer.parseInt(command.substring(7));
 
                         if(move==0){
@@ -112,7 +112,7 @@ class PlayServer {
                 //opponent.output.println("VALID_MOVE " + location_x+location_y);
                 //currentPlayer.output.println("OPPONENT_MOVED " + location_x+location_y);
                 //}
-            }catch (IllegalStateException e) {
+            }catch (Exception e) {
                 output.println("MESSAGE " + e.getMessage());
             }
         }

@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 public class OperateGame {
     private short[][] screenData;
     private char mark;
@@ -9,6 +11,7 @@ public class OperateGame {
     private Queen queen;
     private King king;
     private int num = 0;
+    private JFrame frame;
     private boolean check_king=true,check_rook1=true,check_rook2=true;
     private boolean check_kingO=true,check_rook1O=true,check_rook2O=true;
     public OperateGame(short[][] screenData){
@@ -39,6 +42,17 @@ public class OperateGame {
                             result = pawn.eat(pos_i, pos_j);
                         }
                         if(result!=-1){
+                            if(pos_i == 0){
+                                int v = screenData[pos_i][pos_j];
+                                if(v%2==0){
+                                    v-=2;
+                                }else{
+                                    v-=1;
+                                }
+                                screenData[pos_i][pos_j] = (short) (screenData[pos_i][pos_j]-v);
+                                screenData[pos_i][pos_j] = (short) (screenData[pos_i][pos_j]+64);
+                            }
+                            checkEnd(pos_i,pos_j,my_move);
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
                         }
@@ -53,6 +67,17 @@ public class OperateGame {
                             result = pawn.eat(pos_i, pos_j);
                         }
                         if(result!=-1){
+                            if(pos_i == 7){
+                                int v = screenData[pos_i][pos_j];
+                                if(v%2==0){
+                                    v-=2;
+                                }else{
+                                    v-=1;
+                                }
+                                screenData[pos_i][pos_j] = (short) (screenData[pos_i][pos_j]-v);
+                                screenData[pos_i][pos_j] = (short) (screenData[pos_i][pos_j]+4096);
+                            }
+                            checkEnd(pos_i,pos_j,my_move);
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
                         }
@@ -67,6 +92,7 @@ public class OperateGame {
                             result = horse.eat(pos_i, pos_j);
                         }
                         if(result!=-1){
+                            checkEnd(pos_i,pos_j,my_move);
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
                         }
@@ -81,6 +107,7 @@ public class OperateGame {
                             result = bishop.eat(pos_i, pos_j);
                         }
                         if(result!=-1){
+                            checkEnd(pos_i,pos_j,my_move);
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
                         }
@@ -127,6 +154,7 @@ public class OperateGame {
                                     check_rook2O=false;
                                 }
                             }
+                            checkEnd(pos_i,pos_j,my_move);
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
                         }
@@ -141,6 +169,7 @@ public class OperateGame {
                             result = queen.eat(pos_i, pos_j);
                         }
                         if(result!=-1){
+                            checkEnd(pos_i,pos_j,my_move);
                             tool.setFrom_pos_i(-1);
                             tool.setFrom_pos_j(-1);
                         }
@@ -247,6 +276,29 @@ public class OperateGame {
         }
         return false;
     }
+    private void checkEnd(int pos_i,int pos_j,boolean my_move){
+        System.out.println("{1");
+        if(new Tool(screenData).isThreatened(pos_i,pos_j,pos_i,pos_j,mark,!my_move)){
+            System.out.println("{2");
+            boolean check = new EndGame(screenData,mark,my_move).isCheckmate();
+            if(check&&my_move){
+                System.out.println("You Win");
+                JOptionPane.showMessageDialog(frame, "You Win");
+                System.exit(1);
+            }
+            if(check&&!my_move){
+                System.out.println("You lose");
+                JOptionPane.showMessageDialog(frame, "You lose");
+                System.exit(1);
+            }
+        }else{
+            boolean check = new EndGame(screenData,mark,my_move).isCheckmate();
+            if(check||new EndGame(screenData,mark,my_move).isDraw()){
+                JOptionPane.showMessageDialog(frame, "Draw");
+                System.exit(1);
+            }
+        }
+    }
     private void setTools(boolean my_move){
         pawn.setMy_move(my_move);
         horse.setMy_move(my_move);
@@ -288,5 +340,9 @@ public class OperateGame {
 
     public boolean isCheck_rook2() {
         return check_rook2;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
     }
 }

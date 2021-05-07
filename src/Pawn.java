@@ -28,7 +28,6 @@ public class Pawn extends Tool{
     }
 
     public boolean isLegal(int to_pos_i,int to_pos_j,int from_pos_i,int from_pos_j){
-        System.out.println("[3]");
         int step=2;
         boolean scanTools=false;
         if(from_pos_i==6){
@@ -38,13 +37,11 @@ public class Pawn extends Tool{
         }
         if(((to_pos_i>from_pos_i||from_pos_i>=to_pos_i+step)||to_pos_j!=from_pos_j||scanTools
             )&&new OperateGame(screenData).locIsEmpty(to_pos_i,to_pos_j)){
-            System.out.println("[4]");
             return false;
         }
 
         if(!isLegalEat(to_pos_i,to_pos_j,from_pos_i,from_pos_j,false)
                 &&!new OperateGame(screenData).locIsEmpty(to_pos_i,to_pos_j)){
-            System.out.println("[5]");
             return false;
         }
         if(isThreatened(to_pos_i,to_pos_j,from_pos_i,from_pos_j,super.getMark(),super.isMy_move())){
@@ -94,10 +91,8 @@ public class Pawn extends Tool{
         if(to_pos_i==from_pos_i-1
                 &&(to_pos_j==from_pos_j-1||to_pos_j==from_pos_j+1)
                 &&(screenData[to_pos_i][to_pos_j]>=256||king)){
-            System.out.println("[1]");
             return true;
         }else{
-            System.out.println("[2]");
             return false;
         }
     }
@@ -118,7 +113,6 @@ public class Pawn extends Tool{
 
     private boolean scanForTools(int pos_i,int pos_j){
         for(int i=pos_i+1;i<=pos_i+2;i++){
-            System.out.println("screenData[i][pos_j]: "+screenData[i][pos_j]);
             if(screenData[i][pos_j]!=1&&screenData[i][pos_j]!=2){
                return true;
             }

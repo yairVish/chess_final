@@ -97,12 +97,12 @@ public class Tool {
         return true;
     }
     public boolean isLegalEat(int pos_i,int pos_j){
-        for(int i=4;i<=8192;i+=i) {
-            if ((screenData[pos_i][pos_j] & i) != 0) {
+        for(int i=4;i<=8192;i+=i){
+            if ((screenData[pos_i][pos_j] & i) != 0){
                 if ((my_move && mark == 'W' && i <=128)
                         || (!my_move && mark == 'W' && i >=256)
                         || (my_move && mark == 'B' && i >=256)
-                        || (!my_move && mark == 'B' && i <=128)) {
+                        || (!my_move && mark == 'B' && i <=128)){
                     return false;
                 }
             }
@@ -156,10 +156,33 @@ public class Tool {
                 screenData[i][j]=this.screenData[i][j];
             }
         }
+        System.out.println("################################ before #########################################");
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++) {
+                String space="";
+                if(String.valueOf(screenData[i][j]).length()==1){
+                    space="   ";
+                }
+                if(String.valueOf(screenData[i][j]).length()==2){
+                    space="  ";
+                }
+                if(String.valueOf(screenData[i][j]).length()==3){
+                    space=" ";
+                }
+                System.out.print(", "+space+screenData[i][j]);
+            }
+            System.out.println();
+        }
 
-        if(my_move)
+        System.out.println("################################ after #########################################");
+        System.out.println("from_pos_iS: "+from_pos_i);
+        System.out.println("from_pos_jS: "+from_pos_j);
+        System.out.println("to_pos_iS: "+to_pos_j);
+        System.out.println("to_pos_jS: "+to_pos_j);
+        if(my_move&&screenData[from_pos_i][from_pos_j]>=16384)
             screenData[from_pos_i][from_pos_j] = (short) (screenData[from_pos_i][from_pos_j] - 16384);
-        if(screenData[to_pos_i][to_pos_j]!=1&&screenData[to_pos_i][to_pos_j]!=2){
+        if(screenData[to_pos_i][to_pos_j]!=1&&screenData[to_pos_i][to_pos_j]!=2
+        &&(to_pos_i!=from_pos_i||to_pos_j!=from_pos_j)){
             int valueO=screenData[to_pos_i][to_pos_j];
             if(valueO%2==0){
                 valueO-=2;
