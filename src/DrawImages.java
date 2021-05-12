@@ -26,12 +26,12 @@ public class DrawImages {
         bishop = new ImageIcon("bishop_t.png").getImage();
         horse = new ImageIcon("horse_t.png").getImage();
         pawn = new ImageIcon("pawn_t.png").getImage();
-        king_b = new ImageIcon("king_b.png").getImage();
+        king_b = new ImageIcon("king_tb.png").getImage();
         quin_b = new ImageIcon("queen_tb.png").getImage();
-        rook_b = new ImageIcon("rook_b.png").getImage();
-        bishop_b = new ImageIcon("bishop_b.png").getImage();
-        horse_b = new ImageIcon("horse_b.png").getImage();
-        pawn_b = new ImageIcon("pawn_b.png").getImage();
+        rook_b = new ImageIcon("rook_tb.png").getImage();
+        bishop_b = new ImageIcon("bishop_tb.png").getImage();
+        horse_b = new ImageIcon("horse_tb.png").getImage();
+        pawn_b = new ImageIcon("pawn_tb.png").getImage();
         white = new ImageIcon("white.png").getImage();
         brown = new ImageIcon("brown.png").getImage();
         green = new ImageIcon("green.png").getImage();
